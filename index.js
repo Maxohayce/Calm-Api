@@ -23,6 +23,10 @@ app.use(
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Calm API");
+});
+
 app.post("/messages", (req, res) => {
   const { initials, text, time } = req.body;
 
