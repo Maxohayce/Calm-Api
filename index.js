@@ -1,16 +1,16 @@
 require("dotenv").config();
 const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
 const cors = require("cors");
+const Pusher = require("pusher");
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "https://calm-client.netlify.app",
-    methods: ["GET", "POST"],
-  },
+
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID, // Replace with your Pusher App ID
+  key: process.env.PUSHER_KEY, // Replace with your Pusher Key
+  secret: process.env.PUSHER_SECRET, // Replace with your Pusher Secret
+  cluster: process.env.PUSHER_CLUSTER, // Replace with your Pusher Cluster
+  useTLS: true,
 });
 
 app.use(
@@ -20,23 +20,22 @@ app.use(
     credentials: true,
   })
 );
-app.get("/", (req, res) => {
-  res.send("server is running");
-});
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
+app.use(express.json());
 
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
+app.post("/messages", (req, res) => {
+  const { initials, text, time } = req.body;
+
+  pusher.trigger("chat", "chat-message", {
+    initials,
+    text,
+    time,
   });
 
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
+  res.status(200).send("Message sent");
 });
 
 const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
