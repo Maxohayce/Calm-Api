@@ -15,7 +15,7 @@ const io = new Server(server, {
 
 app.use(
   cors({
-    origin: "https://localhost:3000",
+    origin: "https://calm-client.netlify.app",
     methods: ["GET", "POST"],
     credentials: true,
   })
