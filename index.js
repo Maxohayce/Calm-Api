@@ -15,11 +15,12 @@ const pusher = new Pusher({
 
 app.use(
   cors({
-    origin:  "https://calm-client.netlify.app", 
-    methods: ["GET", "POST"],
+    origin: ['http://localhost:3000', 'https://calm-client.netlify.app'],
+    methods: ['GET', 'POST'],
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
@@ -29,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/messages", (req, res) => {
-  console.log("Message received:", req.body);  // Log incoming message data
+  console.log("Message received:", req.body); 
 
   const { initials, text, time } = req.body;
 
