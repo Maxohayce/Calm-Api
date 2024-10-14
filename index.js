@@ -15,7 +15,7 @@ const pusher = new Pusher({
 
 app.use(
   cors({
-    origin: "https://calm-client.netlify.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   })
